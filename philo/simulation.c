@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 16:09:27 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/19 16:46:16 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/06/19 18:39:29 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ void	*philosopher(void *data)
 	while (1)
 	{
 		pthread_mutex_lock(&g_forks[philo->right]);
+		print_stat(0, philo->id);
 		pthread_mutex_lock(&g_forks[philo->left]);
+		print_stat(0, philo->id);
 		philo->limit = get_time() + g_settings.t_die;
 		print_stat(1, philo->id);
 		eat_count(philo);
@@ -83,7 +85,7 @@ int	simulation(t_settings *set)
 		pthread_mutex_init(&g_forks[i], NULL);
 		set->phlios[i].id = i + 1;
 		set->phlios[i].right = i;
-		set->phlios[i].left = (i + 1) % 5;
+		set->phlios[i].left = (i + 1) % set->total;
 		set->phlios[i].died = &died;
 		i++;
 	}
@@ -93,6 +95,7 @@ int	simulation(t_settings *set)
 	{
 		pthread_create(&set->phlios[i].th, NULL, philosopher, &set->phlios[i]);
 		pthread_detach(set->phlios[i].th);
+		usleep(10);
 		i = i + 1;
 	}
 	wait_simulation(&died);
