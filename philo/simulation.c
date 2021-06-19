@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 16:09:27 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/19 16:14:25 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/06/19 16:46:16 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,17 @@ void	*philosopher(void *data)
 	return (NULL);
 }
 
-void	sleep_simulation(int *died)
+void	wait_simulation(int *died)
 {
 	while (!*died)
 	{
-		if (g_eat_count == g_settings.total - 1)
+		if (g_settings.nbt_eat != -1)
 		{
-			printf("end of simulation\n");
-			break ;
+			if (g_eat_count == g_settings.total - 1)
+			{
+				printf("end of simulation\n");
+				break ;
+			}
 		}
 		usleep(100);
 	}
@@ -92,6 +95,6 @@ int	simulation(t_settings *set)
 		pthread_detach(set->phlios[i].th);
 		i = i + 1;
 	}
-	sleep_simulation(&died);
+	wait_simulation(&died);
 	return (0);
 }
