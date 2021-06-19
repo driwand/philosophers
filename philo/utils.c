@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:39:19 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/19 16:16:45 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/06/19 18:24:00 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ void	print_stat(int stat, int id)
 
 	time = get_time() - g_start_time;
 	pthread_mutex_lock(&g_io_lock);
-	if (stat == 1)
+	if (stat == 0)
+		check = "has taken a fork";
+	else if (stat == 1)
 		check = "is eating";
 	else if (stat == 2)
 		check = "is sleeping";
