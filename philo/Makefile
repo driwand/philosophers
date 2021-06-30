@@ -15,7 +15,7 @@ HEADERS = -I .
 all : $(NAME) 
 
 $(NAME): $(OBJS)
-	$(CC) $(HEADERS) $(OBJS) -o $(NAME)
+	$(CC) $(FLAGS) $(HEADERS) $(OBJS) -o $(NAME)
 
 %.o : %.c philo.h 
 	$(CC) $(HEADERS) -c $< -o $@

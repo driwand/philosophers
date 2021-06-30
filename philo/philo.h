@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:29:19 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/19 16:10:21 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/06/30 16:11:26 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_philo
 	int				right;
 	unsigned int	limit;
 	int				eat_count;
-	int				*died;
+	pthread_mutex_t	eat_lock;
 }				t_philo;
 
 typedef struct s_settings
@@ -40,7 +40,7 @@ typedef struct s_settings
 	int		t_sleep;
 	int		nbt_eat;
 	int		i;
-	t_philo	*phlios;
+	t_philo	*philos;
 }	t_settings;
 
 pthread_mutex_t	g_io_lock;
@@ -48,6 +48,7 @@ unsigned int	g_start_time;
 int				g_eat_count;
 pthread_mutex_t	*g_forks;
 t_settings		g_settings;
+pthread_mutex_t	g_mainlock;
 
 /* simulation */
 int				simulation(t_settings *settings);

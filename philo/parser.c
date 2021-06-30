@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:42:56 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/18 17:20:41 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/06/29 19:03:10 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,15 @@ int	ft_atoi(const char *str)
 	return (number);
 }
 
-int	check_valid(int i, int res)
+int	check_valid(int i, int res, int nbt_eat)
 {
 	if (i == 5 && res < 0)
 		return (0);
 	else if (i == 1 && (res < 0 || res > 200))
 		return (0);
 	else if (i > 1 && i < 5 && res < 60)
+		return (0);
+	else if (nbt_eat == 0)
 		return (0);
 	return (1);
 }
@@ -98,7 +100,7 @@ int	parse_args(int argc, char **argv, t_settings *settings)
 			settings->t_sleep = res;
 		else
 			settings->nbt_eat = res;
-		if (!check_valid(i, res))
+		if (!check_valid(i, res, settings->nbt_eat))
 			return (0);
 	}
 	return (1);

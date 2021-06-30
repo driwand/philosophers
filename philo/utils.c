@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:39:19 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/19 18:24:00 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/06/29 20:11:06 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ void	print_stat(int stat, int id)
 	else if (stat == 3)
 		check = "is thinking";
 	else
+	{
 		check = "died";
+		pthread_mutex_unlock(&g_mainlock);
+	}
 	printf("%d %d %s\n", time, id, check);
 	if (stat <= 3)
 		pthread_mutex_unlock(&g_io_lock);
@@ -44,10 +47,12 @@ void	print_stat(int stat, int id)
 
 void	eat_count(t_philo *philo)
 {
-	philo->eat_count++;
 	if (g_settings.nbt_eat != -1)
 	{
-		if (philo->eat_count == 5)
-			g_eat_count += 1;
+		philo->eat_count++;
+		if (philo->eat_count == g_settings.nbt_eat)
+		{
+			g_eat_count++;
+		}
 	}
 }
