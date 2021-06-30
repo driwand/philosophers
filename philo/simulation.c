@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 16:09:27 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/30 16:11:27 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/06/30 20:27:51 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@ void	*check_health(void *data)
 	p = data;
 	while (1)
 	{
-		pthread_mutex_lock(&p->eat_lock);
-		if (get_time() >= p->limit)
+		if ((get_time() - p->limit) > g_settings.t_die)
 		{
-			// *p->died = 1;
+			pthread_mutex_lock(&p->eat_lock);
 			print_stat(4, p->id);
 			pthread_mutex_unlock(&g_mainlock);
 			break ;
 		}
-		pthread_mutex_unlock(&p->eat_lock);
+		// pthread_mutex_unlock(&p->eat_lock);
 		usleep(100);
 	}
 	return (NULL);
@@ -36,10 +35,12 @@ void	*check_health(void *data)
 void	*philosopher(void *data)
 {
 	t_philo	*philo;
+	pthread_t	th;
 
 	philo = data;
-	pthread_create(&philo->th_check, NULL, check_health, philo);
-	pthread_detach(philo->th_check);
+	philo->limit = get_time();
+	pthread_create(&th, NULL, &check_health, philo);
+	pthread_detach(th);
 	while (1)
 	{
 		pthread_mutex_lock(&g_forks[philo->right]);
@@ -47,7 +48,7 @@ void	*philosopher(void *data)
 		pthread_mutex_lock(&g_forks[philo->left]);
 		print_stat(0, philo->id);
 		pthread_mutex_lock(&philo->eat_lock);
-		philo->limit = get_time() + g_settings.t_die;
+		philo->limit = get_time();
 		print_stat(1, philo->id);
 		eat_count(philo);
 		usleep(g_settings.t_eat * 1000);
@@ -61,22 +62,6 @@ void	*philosopher(void *data)
 	return (NULL);
 }
 
-void	wait_simulation(int *died, int nbr_eat)
-{
-	while (!*died)
-	{
-		if (g_settings.nbt_eat != -1)
-		{
-			if (g_eat_count == g_settings.total)
-			{
-				printf("end of simulation\n");
-				break ;
-			}
-		}
-		usleep(100);
-	}
-}
-
 int	simulation(t_settings *set)
 {
 	int	i;
@@ -84,7 +69,6 @@ int	simulation(t_settings *set)
 	i = 0;
 	while (i < set->total)
 	{
-		pthread_mutex_init(&g_forks[i], NULL);
 		pthread_mutex_init(&set->philos[i].eat_lock, NULL);
 		set->philos[i].eat_count = 0;
 		set->philos[i].id = i + 1;
@@ -93,16 +77,14 @@ int	simulation(t_settings *set)
 		i++;
 	}
 	g_start_time = get_time();
+	pthread_mutex_lock(&g_mainlock);
 	i = 0;
 	while (i < set->total)
 	{
-		set->philos[i].limit = get_time() + g_settings.t_die;
-		set->philos[i].eat_count = 0;
-		pthread_create(&set->philos[i].th, NULL, philosopher, &set->philos[i]);
-		pthread_detach(set->philos[i].th);
+		pthread_create(&set->philos[i].thread, NULL, &philosopher, &set->philos[i]);
+		pthread_detach(set->philos[i].thread);
 		usleep(100);
 		i++;
 	}
-	// wait_simulation(&died, set->nbt_eat);
 	return (0);
 }

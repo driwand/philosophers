@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:39:19 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/29 20:11:06 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/06/30 20:22:57 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	print_stat(int stat, int id)
 	int		time;
 	char	*check;
 
-	time = get_time() - g_start_time;
 	pthread_mutex_lock(&g_io_lock);
+	time = get_time() - g_start_time;
 	if (stat == 0)
 		check = "has taken a fork";
 	else if (stat == 1)
