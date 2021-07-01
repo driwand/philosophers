@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 16:09:27 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/07/01 12:43:13 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/07/01 14:42:18 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	simulation(t_settings *set)
 	{
 		pthread_create(&set->philos[i].thread, NULL, &philo, &set->philos[i]);
 		pthread_detach(set->philos[i].thread);
-		usleep(100);
+		usleep(10);
 		i++;
 	}
 	return (0);
