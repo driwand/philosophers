@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:29:19 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/30 19:31:20 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/07/01 12:55:27 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_settings
 	int		t_sleep;
 	int		nbt_eat;
 	int		i;
-	t_philo			*philos;
+	t_philo	*philos;
 }	t_settings;
 
 pthread_mutex_t	g_io_lock;
@@ -47,6 +47,7 @@ int				g_eat_count;
 pthread_mutex_t	*g_forks;
 t_settings		g_settings;
 pthread_mutex_t	g_mainlock;
+pthread_mutex_t	g_lockeat;
 
 /* simulation */
 int				simulation(t_settings *settings);

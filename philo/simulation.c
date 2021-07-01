@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 16:09:27 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/30 20:27:51 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/07/01 12:43:13 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,30 @@
 
 void	*check_health(void *data)
 {
-	t_philo	*p;
+	t_philo	*philo;
 
-	p = data;
+	philo = data;
+	philo->limit = get_time();
 	while (1)
 	{
-		if ((get_time() - p->limit) > g_settings.t_die)
+		if ((get_time() - philo->limit) > g_settings.t_die)
 		{
-			pthread_mutex_lock(&p->eat_lock);
-			print_stat(4, p->id);
+			pthread_mutex_lock(&philo->eat_lock);
+			print_stat(4, philo->id);
 			pthread_mutex_unlock(&g_mainlock);
 			break ;
 		}
-		// pthread_mutex_unlock(&p->eat_lock);
 		usleep(100);
 	}
 	return (NULL);
 }
 
-void	*philosopher(void *data)
+void	*philo(void *data)
 {
-	t_philo	*philo;
+	t_philo		*philo;
 	pthread_t	th;
 
 	philo = data;
-	philo->limit = get_time();
 	pthread_create(&th, NULL, &check_health, philo);
 	pthread_detach(th);
 	while (1)
@@ -81,7 +80,7 @@ int	simulation(t_settings *set)
 	i = 0;
 	while (i < set->total)
 	{
-		pthread_create(&set->philos[i].thread, NULL, &philosopher, &set->philos[i]);
+		pthread_create(&set->philos[i].thread, NULL, &philo, &set->philos[i]);
 		pthread_detach(set->philos[i].thread);
 		usleep(100);
 		i++;

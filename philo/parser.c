@@ -6,7 +6,7 @@
 /*   By: abkssiba <abkssiba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:42:56 by abkssiba          #+#    #+#             */
-/*   Updated: 2021/06/29 19:03:10 by abkssiba         ###   ########.fr       */
+/*   Updated: 2021/07/01 13:52:18 by abkssiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_stringisnumber(char *str)
 	return (1);
 }
 
-int	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	int		iss;
 	long	value;
@@ -80,8 +80,8 @@ int	check_valid(int i, int res, int nbt_eat)
 
 int	parse_args(int argc, char **argv, t_settings *settings)
 {
-	int	i;
-	int	res;
+	int		i;
+	long	res;
 
 	i = 0;
 	settings->nbt_eat = -1;
@@ -100,7 +100,7 @@ int	parse_args(int argc, char **argv, t_settings *settings)
 			settings->t_sleep = res;
 		else
 			settings->nbt_eat = res;
-		if (!check_valid(i, res, settings->nbt_eat))
+		if (res > INT32_MAX || !check_valid(i, res, settings->nbt_eat))
 			return (0);
 	}
 	return (1);
